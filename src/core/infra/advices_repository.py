@@ -1,5 +1,4 @@
-from core.domain.advice import Advice
-from core.domain.advice_like import AdviceLike
+from core.domain.advice import Advice, AdviceLike
 
 
 class AdvicesRepository:
