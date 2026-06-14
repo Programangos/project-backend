@@ -10,7 +10,8 @@ class NoticesService:
         self.repository = repository
 
     def create_notice(self, data: dict, user_id: int):
-        if not data.get('title', '').strip():
+        title = data.get('title', '').strip()
+        if not title:
             raise ValidationError('El titulo es obligatorio.')
         expiration = data.get('expiration_date')
         if expiration and expiration < date.today():
@@ -23,7 +24,8 @@ class NoticesService:
         return self.repository.create_like(notice_id, user_id)
 
     def report_notice(self, notice_id: int, reporter_id: int, reason: str):
-        if not reason.strip():
+        reason_stripped = reason.strip()
+        if not reason_stripped:
             raise ValidationError('La razon del reporte es obligatoria.')
         data = {
             'content_type': 'notice',

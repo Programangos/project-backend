@@ -9,13 +9,16 @@ class AdvicesService:
         self.repository = repository
 
     def create_advice(self, data: dict, user_id: int):
-        if not data.get('title', '').strip():
+        title = data.get('title', '').strip()
+        if not title:
             raise ValidationError("El título es obligatorio.")
 
-        if not data.get('content', '').strip():
+        content = data.get('content', '').strip()
+        if not content:
             raise ValidationError("El contenido es obligatorio.")
 
-        if not data.get('category', '').strip():
+        category = data.get('category', '').strip()
+        if not category:
             raise ValidationError("La categoría es obligatoria.")
 
         return self.repository.create(data, user_id)

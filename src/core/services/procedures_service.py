@@ -11,7 +11,8 @@ class ProceduresService:
     def create_experience(self, data: dict, user_id: int):
         if data.get('actual_time_days', 0) <= 0:
             raise ValidationError("El tiempo debe ser mayor a cero.")
-        if not data.get('comment', '').strip():
+        comment = data.get('comment', '').strip()
+        if not comment:
             raise ValidationError("El comentario es obligatorio.")
         return self.repository.create_experience(data, user_id)
 
