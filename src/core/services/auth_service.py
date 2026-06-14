@@ -9,21 +9,23 @@ class AuthService:
             repository = UserRepository()
         self.repository = repository
 
+    def _hash_password(self, password: str) -> str:
+        return hashlib.sha256(password.encode()).hexdigest()
+
     def register(self, data: dict):
         email = data.get('email', '')
         if not email.endswith('@unal.edu.co'):
             raise ValidationError("El correo debe ser institucional (@unal.edu.co).")
         if self.repository.find_by_email(email):
             raise ValidationError("El correo ya está registrado.")
-        data['password_hash'] = hashlib.sha256(
-            data.pop('password').encode()
-        ).hexdigest()
+        data['password_hash'] = self._hash_password(data.pop('password'))
         return self.repository.create(data)
 
     def login(self, email: str, password: str):
         user = self.repository.find_by_email(email)
-        password_hash = hashlib.sha256(password.encode()).hexdigest()
-        if not user or user.password_hash != password_hash:
+        if not user:
+            raise ValidationError("Credenciales inválidas.")
+        if user.password_hash != self._hash_password(password):
             raise ValidationError("Credenciales inválidas.")
         return user
 

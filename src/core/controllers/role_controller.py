@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from core.services.role_service import RoleService
 from core.serializers.role_serializer import RoleSerializer
 
+
 class RoleController(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

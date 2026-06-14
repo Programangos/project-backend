@@ -36,4 +36,3 @@ class NoticeLike(models.Model):
         db_table = 'notice_like'
         managed = False
         unique_together = ('user', 'notice')
-

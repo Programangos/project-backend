@@ -41,19 +41,19 @@ src/
 ## Ejecutar pruebas
 
 ```bash
-cd src
-coverage run -m pytest core/tests/ -v
-coverage report -m
+pytest -v
 ```
 
-## Generar reporte HTML de cobertura
+Con cobertura:
 
 ```bash
+coverage run -m pytest -v
+coverage report -m
 coverage html
 ```
 
 ## Analizador estático (linter)
 
 ```bash
-flake8 src/
+flake8 src/ --max-line-length=100
 ```

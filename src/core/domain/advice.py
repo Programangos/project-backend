@@ -34,3 +34,4 @@ class AdviceLike(models.Model):
     class Meta:
         db_table = 'advice_like'
         managed = False
+        unique_together = ('user', 'advice')
