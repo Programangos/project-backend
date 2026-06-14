@@ -9,3 +9,5 @@ build/
 *.sqlite3
 .coverage
 htmlcov/
+linter_report.txt
+*.txt

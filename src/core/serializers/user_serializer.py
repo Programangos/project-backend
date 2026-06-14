@@ -5,7 +5,10 @@ from core.domain.user import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'full_name', 'email', 'major', 'current_semester', 'reputation_points', 'created_at']
+        fields = [
+            'id', 'full_name', 'email', 'major',
+            'current_semester', 'reputation_points', 'created_at',
+        ]
         read_only_fields = ['id', 'reputation_points', 'created_at']
 
 

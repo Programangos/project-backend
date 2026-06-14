@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from core.domain.advice import Advice
-from core.domain.advice_like import AdviceLike
+from core.domain.advice import Advice, AdviceLike
 
 
 class AdviceSerializer(serializers.ModelSerializer):

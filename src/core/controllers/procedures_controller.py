@@ -2,7 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from core.services.procedures_service import ProceduresService
-from core.serializers.procedure_serializer import ProcedureExperienceSerializer, ProcedureExperienceVoteSerializer
+from core.serializers.procedure_serializer import (
+    ProcedureExperienceSerializer,
+    ProcedureExperienceVoteSerializer,
+)
 
 
 class ProcedureExperienceController(APIView):
@@ -28,7 +31,10 @@ class ProcedureAvgTimeController(APIView):
 
     def get(self, request, procedure_id):
         avg = self.service.get_avg_time(procedure_id)
-        return Response({'procedure_id': procedure_id, 'avg_time_days': avg}, status=status.HTTP_200_OK)
+        return Response(
+            {'procedure_id': procedure_id, 'avg_time_days': avg},
+            status=status.HTTP_200_OK,
+        )
 
 
 class ProcedureExperienceVoteController(APIView):
@@ -41,4 +47,7 @@ class ProcedureExperienceVoteController(APIView):
             experience_id=experience_id,
             user_id=request.data.get('user_id')
         )
-        return Response(ProcedureExperienceVoteSerializer(result).data, status=status.HTTP_201_CREATED)
+        return Response(
+            ProcedureExperienceVoteSerializer(result).data,
+            status=status.HTTP_201_CREATED,
+        )
