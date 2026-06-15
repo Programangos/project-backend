@@ -1,7 +1,8 @@
 from rest_framework.exceptions import ValidationError
+from core.services.base_service import BaseService
 
 
-class AdvicesService:
+class AdvicesService(BaseService):
     def __init__(self, repository=None):
         if repository is None:
             from core.infra.advices_repository import AdvicesRepository
@@ -24,7 +25,8 @@ class AdvicesService:
         return self.repository.create(data, user_id)
 
     def like_advice(self, advice_id: int, user_id: int):
-        if self.repository.like_exists(advice_id, user_id):
-            raise ValidationError("El usuario ya votó este consejo.")
-
+        self._ensure_not_duplicate(
+            self.repository.like_exists(advice_id, user_id),
+            "El usuario ya votó este consejo."
+        )
         return self.repository.create_like(advice_id, user_id)
