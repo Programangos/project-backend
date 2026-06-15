@@ -1,7 +1,8 @@
 from rest_framework.exceptions import ValidationError
+from core.services.base_service import BaseService
 
 
-class ProceduresService:
+class ProceduresService(BaseService):
     def __init__(self, repository=None):
         if repository is None:
             from core.infra.procedures_repository import ProceduresRepository
@@ -22,6 +23,8 @@ class ProceduresService:
         return self.repository.get_avg_time(procedure_id)
 
     def like_experience(self, experience_id: int, user_id: int):
-        if self.repository.vote_exists(experience_id, user_id):
-            raise ValidationError("El usuario ya votó esta experiencia.")
+        self._ensure_not_duplicate(
+            self.repository.vote_exists(experience_id, user_id),
+            "El usuario ya votó esta experiencia."
+        )
         return self.repository.create_vote(experience_id, user_id)

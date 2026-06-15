@@ -1,8 +1,9 @@
 from datetime import date
 from rest_framework.exceptions import ValidationError
+from core.services.base_service import BaseService
 
 
-class NoticesService:
+class NoticesService(BaseService):
     def __init__(self, repository=None):
         if repository is None:
             from core.infra.notices_repository import NoticesRepository
@@ -19,8 +20,10 @@ class NoticesService:
         return self.repository.create(data, user_id)
 
     def like_notice(self, notice_id: int, user_id: int):
-        if self.repository.like_exists(notice_id, user_id):
-            raise ValidationError('El usuario ya voto este aviso.')
+        self._ensure_not_duplicate(
+            self.repository.like_exists(notice_id, user_id),
+            'El usuario ya voto este aviso.'
+        )
         return self.repository.create_like(notice_id, user_id)
 
     def report_notice(self, notice_id: int, reporter_id: int, reason: str):
