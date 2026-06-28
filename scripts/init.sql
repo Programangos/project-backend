@@ -10,7 +10,7 @@ CREATE TABLE "user" (
     password_hash VARCHAR(255),
     major VARCHAR(255),
     current_semester INT,
-    avatar_url VARCHAR(500),
+    avatar_url TEXT,
     reputation_points INT DEFAULT 0,
     is_active BOOLEAN DEFAULT true,
     role_id INT,

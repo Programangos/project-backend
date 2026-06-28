@@ -7,7 +7,7 @@ class User(models.Model):
     password_hash = models.CharField(max_length=255)
     major = models.CharField(max_length=255)
     current_semester = models.IntegerField()
-    avatar_url = models.CharField(max_length=500, null=True, blank=True)
+    avatar_url = models.TextField(blank=True, null=True)
     reputation_points = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     role = models.ForeignKey(

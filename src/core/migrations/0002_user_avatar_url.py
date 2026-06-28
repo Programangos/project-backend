@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
     ]
     operations = [
         migrations.RunSQL(
-            sql='ALTER TABLE "user" ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500) NULL;',
+            sql='ALTER TABLE "user" ADD COLUMN IF NOT EXISTS avatar_url TEXT NULL;',
             reverse_sql='ALTER TABLE "user" DROP COLUMN IF EXISTS avatar_url;',
         ),
     ]
