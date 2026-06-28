@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+.pytest_cache
+__pycache__
+*.pyc
+htmlcov
+.coverage
+linter_report.txt
+docs
+scripts
+setup.bat
+setup.sh

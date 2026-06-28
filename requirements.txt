@@ -1,7 +1,9 @@
 Django>=6.0,<7.0
 djangorestframework>=3.17,<4.0
 psycopg2-binary>=2.9,<3.0
-python-decouple>=3.8,<4.0
+gunicorn>=23.0,<24.0
+django-environ>=0.12,<1.0
+django-cors-headers>=4.7,<5.0
 pytest>=9.0,<10.0
 pytest-django>=4.10,<5.0
 coverage>=7.0,<8.0
