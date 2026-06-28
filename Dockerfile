@@ -7,7 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN cd src && python manage.py collectstatic --noinput
+RUN SECRET_KEY=dummy PGDATABASE=dummy PGUSER=dummy PGPASSWORD=dummy PGHOST=dummy \
+    cd src && python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
