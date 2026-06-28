@@ -3,13 +3,19 @@ from core.domain.user import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_characterized = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
             'id', 'full_name', 'email', 'major',
             'current_semester', 'reputation_points', 'created_at',
+            'is_characterized',
         ]
-        read_only_fields = ['id', 'reputation_points', 'created_at']
+        read_only_fields = ['id', 'reputation_points', 'created_at', 'is_characterized']
+
+    def get_is_characterized(self, obj):
+        return bool(obj.major and obj.current_semester)
 
 
 class RegisterSerializer(serializers.Serializer):
