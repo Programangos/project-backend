@@ -20,7 +20,9 @@ env = environ.Env(
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env_file = os.path.join(BASE_DIR, '.env')
+if os.path.exists(env_file):
+    environ.Env.read_env(env_file)
 
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-replace-me-in-production')
 
