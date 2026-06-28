@@ -30,7 +30,7 @@ class AuthService:
         return user
 
     def update_profile(self, user_id: int, data: dict):
-        allowed = {'major', 'current_semester'}
+        allowed = {'major', 'current_semester', 'avatar_url'}
         filtered = {k: v for k, v in data.items() if k in allowed}
         if not filtered:
             raise ValidationError("No hay campos válidos para actualizar.")

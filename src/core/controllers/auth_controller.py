@@ -15,8 +15,13 @@ class RegisterController(APIView):
         serializer = RegisterSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        result = self.service.register(serializer.validated_data)
-        return Response(UserSerializer(result).data, status=status.HTTP_201_CREATED)
+        user = self.service.register(serializer.validated_data)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': UserSerializer(user).data,
+        }, status=status.HTTP_201_CREATED)
 
 
 class LoginController(APIView):
