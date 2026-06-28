@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
 from core.services.auth_service import AuthService
 from core.serializers.user_serializer import UserSerializer, RegisterSerializer, LoginSerializer
 
@@ -27,11 +28,16 @@ class LoginController(APIView):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        result = self.service.login(
+        user = self.service.login(
             serializer.validated_data['email'],
             serializer.validated_data['password']
         )
-        return Response(UserSerializer(result).data, status=status.HTTP_200_OK)
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': UserSerializer(user).data,
+        }, status=status.HTTP_200_OK)
 
 
 class ProfileController(APIView):
