@@ -7,6 +7,7 @@ from core.serializers.user_serializer import UserSerializer, RegisterSerializer,
 
 
 class RegisterController(APIView):
+    authentication_classes = []
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = AuthService()
@@ -25,6 +26,8 @@ class RegisterController(APIView):
 
 
 class LoginController(APIView):
+    authentication_classes = []
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = AuthService()
@@ -56,6 +59,8 @@ class ProfileController(APIView):
 
 
 class ForgotPasswordController(APIView):
+    authentication_classes = []
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = AuthService()
@@ -69,6 +74,8 @@ class ForgotPasswordController(APIView):
 
 
 class ResetPasswordController(APIView):
+    authentication_classes = []
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.service = AuthService()
