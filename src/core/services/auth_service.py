@@ -66,6 +66,15 @@ class AuthService:
         service = EmailService()
         service.send_password_reset(email, token)
 
+    def get_all_users(self):
+        return self.repository.get_all()
+
+    def delete_user(self, user_id: int):
+        self.repository.delete(user_id)
+
+    def update_user_role(self, user_id: int, role_id: int):
+        return self.repository.update(user_id, {'role_id': role_id})
+
     def reset_password(self, token: str, new_password: str):
         from django.db import connection
 
