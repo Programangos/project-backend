@@ -1,10 +1,11 @@
-import resend
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail, From, To
 from django.conf import settings
 
 
 class EmailService:
     def __init__(self):
-        resend.api_key = settings.RESEND_API_KEY
+        self.client = SendGridAPIClient(settings.SENDGRID_API_KEY)
 
     def send_password_reset(self, to_email: str, token: str, frontend_url: str | None = None):
         base_url = frontend_url or settings.FRONTEND_URL
@@ -21,10 +22,10 @@ class EmailService:
             <p style="color: #94a3b8; font-size: 12px;">Si no solicitaste este cambio, ignora este correo.</p>
         </div>
         """
-        params = {
-            "from": settings.RESEND_FROM_EMAIL,
-            "to": [to_email],
-            "subject": "Recuperación de contraseña - SISA",
-            "html": html,
-        }
-        resend.Emails.send(params)
+        message = Mail(
+            from_email=From(settings.SENDGRID_FROM_EMAIL),
+            to_emails=To(to_email),
+            subject="Recuperación de contraseña - SISA",
+            html_content=html,
+        )
+        self.client.send(message)
