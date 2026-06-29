@@ -6,6 +6,7 @@ from core.controllers.notices_controller import (
 )
 from core.controllers.auth_controller import (
     RegisterController, LoginController, ProfileController,
+    ForgotPasswordController, ResetPasswordController,
 )
 from core.controllers.procedures_controller import (
     ProcedureExperienceController,
@@ -23,6 +24,8 @@ urlpatterns = [
     path('auth/register/', RegisterController.as_view(), name='register'),
     path('auth/login/', LoginController.as_view(), name='login'),
     path('auth/profile/<int:user_id>/', ProfileController.as_view(), name='profile'),
+    path('auth/forgot-password/', ForgotPasswordController.as_view(), name='forgot-password'),
+    path('auth/reset-password/', ResetPasswordController.as_view(), name='reset-password'),
     path(
         'procedures/<int:procedure_id>/experiences/',
         ProcedureExperienceController.as_view(),

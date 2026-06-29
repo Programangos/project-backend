@@ -134,6 +134,16 @@ CREATE TABLE achievement (
     points_required INT
 );
 
+CREATE TABLE password_reset_token (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
+    token VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_password_reset_token_token ON password_reset_token(token);
+
 CREATE TABLE user_achievement (
     user_id INT,
     achievement_id INT,
