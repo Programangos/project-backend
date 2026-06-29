@@ -139,6 +139,6 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
 }
 
-RESEND_API_KEY = env('RESEND_API_KEY', default='')
-RESEND_FROM_EMAIL = env('RESEND_FROM_EMAIL', default='onboarding@resend.dev')
+SENDGRID_API_KEY = env('SENDGRID_API_KEY', default='')
+SENDGRID_FROM_EMAIL = env('SENDGRID_FROM_EMAIL', default='dparraar@unal.edu.co')
 FRONTEND_URL = env('FRONTEND_URL', default='https://sisa-unal.up.railway.app')
