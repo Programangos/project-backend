@@ -23,6 +23,14 @@ class AuthService:
         if self.repository.find_by_email(email):
             raise ValidationError("El correo ya está registrado.")
         data['password_hash'] = self._hash_password(data.pop('password'))
+        if 'role_id' not in data:
+            try:
+                from core.domain.role import Role
+                regular = Role.objects.filter(name='regular').first()
+                if regular:
+                    data['role_id'] = regular.id
+            except RuntimeError:
+                pass
         return self.repository.create(data)
 
     def login(self, email: str, password: str):
