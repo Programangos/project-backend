@@ -64,10 +64,11 @@ class TestNoticesService:
         resultado = self.service.create_notice(data, user_id=1)
         assert resultado['id'] == 2
 
-    def test_rechazar_like_duplicado(self):
+    def test_like_duplicado_quita_like(self):
         self.mock_repo.like_exists.return_value = True
-        with pytest.raises(ValidationError, match='ya voto'):
-            self.service.like_notice(notice_id=1, user_id=1)
+        resultado = self.service.like_notice(notice_id=1, user_id=1)
+        assert resultado is None
+        self.mock_repo.delete_like.assert_called_once_with(1, 1)
 
     def test_crear_like_valido(self):
         self.mock_repo.like_exists.return_value = False
