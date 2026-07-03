@@ -30,3 +30,7 @@ class AdvicesService(BaseService):
             "El usuario ya votó este consejo."
         )
         return self.repository.create_like(advice_id, user_id)
+    
+
+    def get_all_advices(self, search=None):
+        return self.repository.get_all(search=search)

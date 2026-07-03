@@ -14,6 +14,13 @@ class AdvicesController(APIView):
         super().__init__(**kwargs)
         self.service = AdvicesService()
 
+    def get(self, request):
+        search = request.query_params.get('search')
+        user_id = request.query_params.get('user_id')
+        advices = self.service.get_all_advices(search=search)
+        serializer = AdviceSerializer(advices, many=True, context={'user_id': user_id})
+        return Response(serializer.data)
+
     def post(self, request):
         serializer = AdviceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
