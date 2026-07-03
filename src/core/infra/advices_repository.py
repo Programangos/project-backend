@@ -1,7 +1,6 @@
 from django.db.models import Count, Q
 from core.domain.advice import Advice, AdviceLike
 
-
 class AdvicesRepository:
     def get_all(self, search=None):
         queryset = Advice.objects.annotate(like_count=Count('advicelike'))
