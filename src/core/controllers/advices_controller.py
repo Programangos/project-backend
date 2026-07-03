@@ -60,11 +60,8 @@ class AdviceDeleteController(APIView):
         self.service = AdvicesService()
 
     def delete(self, request, advice_id):
-        user_id = request.data.get('user_id')
-        if not user_id:
-            return Response({'error': 'user_id es obligatorio.'}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            self.service.delete_advice(advice_id, user_id)
+            self.service.delete_advice(advice_id, request.user.id)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except PermissionError:
             return Response({'error': 'No tienes permiso para eliminar este consejo.'}, status=status.HTTP_403_FORBIDDEN)
