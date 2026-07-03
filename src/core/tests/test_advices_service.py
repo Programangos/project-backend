@@ -32,12 +32,13 @@ class TestAdvicesService:
         with pytest.raises(ValidationError, match="categoría"):
             self.service.create_advice(data, user_id=1)
 
-    def test_rechazar_like_duplicado(self):
+    def test_like_toggle_quita_like_si_ya_existe(self):
         self.mock_repo.like_exists.return_value = True
-        with pytest.raises(ValidationError, match="ya votó"):
-            self.service.like_advice(advice_id=1, user_id=1)
+        resultado = self.service.like_advice(advice_id=1, user_id=1)
+        assert resultado is None
+        self.mock_repo.delete_like.assert_called_once_with(1, 1)
 
-    def test_crear_like_valido(self):
+    def test_like_toggle_agrega_like_si_no_existe(self):
         self.mock_repo.like_exists.return_value = False
         self.mock_repo.create_like.return_value = {"id": 1, "advice_id": 1, "user_id": 1}
         resultado = self.service.like_advice(advice_id=1, user_id=1)

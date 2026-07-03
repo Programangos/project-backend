@@ -47,7 +47,26 @@ class AdviceLikeController(APIView):
             user_id=request.data.get('user_id')
         )
 
+        serializer = AdviceLikeSerializer(result) if result else None
         return Response(
-            AdviceLikeSerializer(result).data,
-            status=status.HTTP_201_CREATED
+            serializer.data if serializer else {'liked': False},
+            status=status.HTTP_200_OK
         )
+
+
+class AdviceDeleteController(APIView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.service = AdvicesService()
+
+    def delete(self, request, advice_id):
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({'error': 'user_id es obligatorio.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            self.service.delete_advice(advice_id, user_id)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PermissionError:
+            return Response({'error': 'No tienes permiso para eliminar este consejo.'}, status=status.HTTP_403_FORBIDDEN)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)

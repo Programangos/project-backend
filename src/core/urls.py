@@ -1,6 +1,8 @@
 from django.urls import path
 from core.controllers.role_controller import RoleController
-from core.controllers.advices_controller import AdvicesController, AdviceLikeController
+from core.controllers.advices_controller import (
+    AdvicesController, AdviceLikeController, AdviceDeleteController
+)
 from core.controllers.notices_controller import (
     NoticesController, NoticeLikeController,
     NoticeDeleteController, NoticeReportController
@@ -27,6 +29,7 @@ urlpatterns = [
     path('notices/<int:notice_id>/report/', NoticeReportController.as_view(), name='notice-report'),
     path('roles/', RoleController.as_view(), name='roles'),
     path('advices/', AdvicesController.as_view(), name='advices'),
+    path('advices/<int:advice_id>/', AdviceDeleteController.as_view(), name='advice-delete'),
     path('advices/<int:advice_id>/like/', AdviceLikeController.as_view(), name='advice-like'),
     path('auth/register/', RegisterController.as_view(), name='register'),
     path('auth/login/', LoginController.as_view(), name='login'),
