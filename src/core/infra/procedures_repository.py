@@ -42,3 +42,8 @@ class ProceduresRepository:
         return ProcedureExperienceVote.objects.create(
             experience_id=experience_id, user_id=user_id
         )
+
+    def delete_vote(self, experience_id: int, user_id: int):
+        ProcedureExperienceVote.objects.filter(
+            experience_id=experience_id, user_id=user_id
+        ).delete()

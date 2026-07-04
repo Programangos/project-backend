@@ -47,8 +47,7 @@ class ProceduresService(BaseService):
         procedure.delete()
 
     def like_experience(self, experience_id: int, user_id: int):
-        self._ensure_not_duplicate(
-            self.repository.vote_exists(experience_id, user_id),
-            "El usuario ya votó esta experiencia."
-        )
+        if self.repository.vote_exists(experience_id, user_id):
+            self.repository.delete_vote(experience_id, user_id)
+            return None
         return self.repository.create_vote(experience_id, user_id)
