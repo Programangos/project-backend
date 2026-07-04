@@ -100,6 +100,21 @@ class ProcedureDeleteController(APIView):
             return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
 
 
+class ProcedureExperienceDeleteController(APIView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.service = ProceduresService()
+
+    def delete(self, request, experience_id):
+        try:
+            self.service.delete_experience(experience_id, request.user.id)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PermissionError:
+            return Response({'error': 'No tienes permiso para eliminar esta experiencia.'}, status=status.HTTP_403_FORBIDDEN)
+        except ValueError as e:
+            return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+
 class ProcedureExperienceVoteController(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
