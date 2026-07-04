@@ -12,6 +12,9 @@ from core.controllers.auth_controller import (
     ForgotPasswordController, ResetPasswordController,
 )
 from core.controllers.procedures_controller import (
+    ProcedureListController,
+    ProcedureCreateController,
+    ProcedureDeleteController,
     ProcedureExperienceController,
     ProcedureAvgTimeController,
     ProcedureExperienceVoteController,
@@ -36,6 +39,9 @@ urlpatterns = [
     path('auth/profile/<int:user_id>/', ProfileController.as_view(), name='profile'),
     path('auth/forgot-password/', ForgotPasswordController.as_view(), name='forgot-password'),
     path('auth/reset-password/', ResetPasswordController.as_view(), name='reset-password'),
+    path('procedures/', ProcedureListController.as_view(), name='procedure-list'),
+    path('procedures/create/', ProcedureCreateController.as_view(), name='procedure-create'),
+    path('procedures/<int:procedure_id>/', ProcedureDeleteController.as_view(), name='procedure-delete'),
     path(
         'procedures/<int:procedure_id>/experiences/',
         ProcedureExperienceController.as_view(),

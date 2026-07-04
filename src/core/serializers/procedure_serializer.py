@@ -5,7 +5,7 @@ from core.domain.procedure import Procedure, ProcedureExperience, ProcedureExper
 class ProcedureSerializer(serializers.ModelSerializer):
     class Meta:
         model = Procedure
-        fields = ['id', 'name', 'official_description', 'avg_time_days']
+        fields = ['id', 'name', 'official_description', 'type', 'department', 'avg_time_days']
 
 
 class ProcedureExperienceSerializer(serializers.ModelSerializer):
