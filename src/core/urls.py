@@ -16,6 +16,7 @@ from core.controllers.procedures_controller import (
     ProcedureCreateController,
     ProcedureDeleteController,
     ProcedureExperienceController,
+    ProcedureExperienceDeleteController,
     ProcedureAvgTimeController,
     ProcedureExperienceVoteController,
 )
@@ -51,6 +52,11 @@ urlpatterns = [
         'procedures/<int:procedure_id>/avg-time/',
         ProcedureAvgTimeController.as_view(),
         name='procedure-avg-time',
+    ),
+    path(
+        'experiences/<int:experience_id>/',
+        ProcedureExperienceDeleteController.as_view(),
+        name='experience-delete',
     ),
     path(
         'experiences/<int:experience_id>/vote/',
