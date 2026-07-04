@@ -24,6 +24,22 @@ class ProceduresService(BaseService):
     def get_experiences_with_likes(self, procedure_id: int, user_id=None):
         return self.repository.get_experiences_with_likes(procedure_id, user_id)
 
+    def delete_experience(self, experience_id: int, requester_id: int):
+        from core.domain.user import User
+        from core.domain.procedure import ProcedureExperience
+
+        requester = User.objects.filter(id=requester_id).first()
+        if not requester:
+            raise ValueError('Usuario no encontrado.')
+        experience = ProcedureExperience.objects.filter(id=experience_id).first()
+        if not experience:
+            raise ValueError('Experiencia no encontrada.')
+        is_admin = requester.role and requester.role.name == 'Administrador'
+        is_author = experience.user_id == requester_id
+        if not (is_admin or is_author):
+            raise PermissionError('No tienes permiso para eliminar esta experiencia.')
+        experience.delete()
+
     def delete_procedure(self, procedure_id: int, requester_id: int):
         from core.domain.user import User
         from core.domain.procedure import Procedure, ProcedureExperience, ProcedureExperienceVote

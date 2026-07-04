@@ -19,6 +19,7 @@ from core.controllers.procedures_controller import (
     ProcedureExperienceDeleteController,
     ProcedureAvgTimeController,
     ProcedureExperienceVoteController,
+    ProcedureExperienceDeleteController,
 )
 from core.controllers.admin_controller import (
     AdminListUsersController,
@@ -62,6 +63,11 @@ urlpatterns = [
         'experiences/<int:experience_id>/vote/',
         ProcedureExperienceVoteController.as_view(),
         name='experience-vote',
+    ),
+    path(
+        'experiences/<int:experience_id>/',
+        ProcedureExperienceDeleteController.as_view(),
+        name='experience-delete',
     ),
     path('admin/users/', AdminListUsersController.as_view(), name='admin-users'),
     path('admin/users/<int:user_id>/', AdminDeleteUserController.as_view(), name='admin-delete-user'),
