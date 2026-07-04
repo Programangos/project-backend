@@ -18,6 +18,7 @@ from core.controllers.procedures_controller import (
     ProcedureExperienceController,
     ProcedureAvgTimeController,
     ProcedureExperienceVoteController,
+    ProcedureExperienceDeleteController,
 )
 from core.controllers.admin_controller import (
     AdminListUsersController,
