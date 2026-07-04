@@ -57,6 +57,11 @@ urlpatterns = [
         ProcedureExperienceVoteController.as_view(),
         name='experience-vote',
     ),
+    path(
+        'experiences/<int:experience_id>/',
+        ProcedureExperienceDeleteController.as_view(),
+        name='experience-delete',
+    ),
     path('admin/users/', AdminListUsersController.as_view(), name='admin-users'),
     path('admin/users/<int:user_id>/', AdminDeleteUserController.as_view(), name='admin-delete-user'),
     path('admin/users/<int:user_id>/role/', AdminUpdateRoleController.as_view(), name='admin-update-role'),
