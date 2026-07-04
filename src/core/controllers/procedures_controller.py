@@ -28,6 +28,14 @@ class ProcedureListController(APIView):
 
 class ProcedureCreateController(APIView):
     def post(self, request):
+        user_id = getattr(request.user, 'id', None)
+        if not user_id:
+            return Response({'error': 'Debes iniciar sesión.'}, status=status.HTTP_401_UNAUTHORIZED)
+        from core.domain.user import User
+        requester = User.objects.filter(id=user_id).first()
+        if not requester or not (requester.role and requester.role.name == 'Administrador'):
+            return Response({'error': 'Solo los administradores pueden crear trámites.'}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = ProcedureSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -46,13 +54,16 @@ class ProcedureExperienceController(APIView):
         return Response(experiences)
 
     def post(self, request, procedure_id):
+        user_id = getattr(request.user, 'id', None)
+        if not user_id:
+            return Response({'error': 'Debes iniciar sesión para publicar una experiencia.'}, status=status.HTTP_401_UNAUTHORIZED)
+
         data = copy.deepcopy(request.data)
         if isinstance(data, dict):
             data['procedure_id'] = procedure_id
         serializer = ProcedureExperienceSerializer(data=data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        user_id = data.get('user_id', serializer.validated_data.get('user_id'))
         result = self.service.create_experience(
             serializer.validated_data,
             user_id=user_id,
@@ -95,11 +106,16 @@ class ProcedureExperienceVoteController(APIView):
         self.service = ProceduresService()
 
     def post(self, request, experience_id):
+        user_id = getattr(request.user, 'id', None)
+        if not user_id:
+            return Response({'error': 'Debes iniciar sesión para votar.'}, status=status.HTTP_401_UNAUTHORIZED)
+
         result = self.service.like_experience(
             experience_id=experience_id,
-            user_id=request.data.get('user_id')
+            user_id=user_id
         )
+        serializer = ProcedureExperienceVoteSerializer(result) if result else None
         return Response(
-            ProcedureExperienceVoteSerializer(result).data,
-            status=status.HTTP_201_CREATED,
+            serializer.data if serializer else {'liked': False},
+            status=status.HTTP_200_OK,
         )

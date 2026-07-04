@@ -22,12 +22,16 @@ class AdvicesController(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        user_id = getattr(request.user, 'id', None)
+        if not user_id:
+            return Response({'error': 'Debes iniciar sesión para publicar un consejo.'}, status=status.HTTP_401_UNAUTHORIZED)
+
         serializer = AdviceSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         result = self.service.create_advice(
             serializer.validated_data,
-            user_id=request.data.get('user_id')
+            user_id=user_id
         )
 
         return Response(
@@ -42,9 +46,13 @@ class AdviceLikeController(APIView):
         self.service = AdvicesService()
 
     def post(self, request, advice_id):
+        user_id = getattr(request.user, 'id', None)
+        if not user_id:
+            return Response({'error': 'Debes iniciar sesión para dar me gusta.'}, status=status.HTTP_401_UNAUTHORIZED)
+
         result = self.service.like_advice(
             advice_id=advice_id,
-            user_id=request.data.get('user_id')
+            user_id=user_id
         )
 
         serializer = AdviceLikeSerializer(result) if result else None
