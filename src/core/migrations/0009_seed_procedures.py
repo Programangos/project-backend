@@ -1,6 +1,5 @@
 from django.db import migrations
 
-
 PROCEDURES = [
     {
         'name': 'Aplazamiento de uso de derecho de matrícula para admitidos de posgrado',
@@ -210,7 +209,7 @@ PROCEDURES = [
 
 
 def seed_procedures(apps, schema_editor):
-    Procedure = apps.get_model('core', 'Procedure')
+    from core.domain.procedure import Procedure
     for proc in PROCEDURES:
         Procedure.objects.get_or_create(
             name=proc['name'],
@@ -223,7 +222,7 @@ def seed_procedures(apps, schema_editor):
 
 
 def reverse_seed(apps, schema_editor):
-    Procedure = apps.get_model('core', 'Procedure')
+    from core.domain.procedure import Procedure
     names = [p['name'] for p in PROCEDURES]
     Procedure.objects.filter(name__in=names).delete()
 
