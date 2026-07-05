@@ -53,6 +53,12 @@ class ProfileController(APIView):
         super().__init__(**kwargs)
         self.service = AuthService()
 
+    def get(self, request, user_id):
+        user = self.service.get_user(user_id)
+        if not user:
+            return Response({'error': 'Usuario no encontrado.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
     def patch(self, request, user_id):
         result = self.service.update_profile(user_id, request.data)
         return Response(UserSerializer(result).data, status=status.HTTP_200_OK)

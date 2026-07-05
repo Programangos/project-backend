@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from core.services.base_service import BaseService
+from core.services.points_service import PointsService
 
 
 class AdvicesService(BaseService):
@@ -8,6 +9,7 @@ class AdvicesService(BaseService):
             from core.infra.advices_repository import AdvicesRepository
             repository = AdvicesRepository()
         self.repository = repository
+        self.points_service = PointsService()
 
     def get_all_advices(self, search=None):
         return self.repository.get_all(search=search)
@@ -25,13 +27,19 @@ class AdvicesService(BaseService):
         if not category:
             raise ValidationError("La categoría es obligatoria.")
 
-        return self.repository.create(data, user_id)
+        advice = self.repository.create(data, user_id)
+        self.points_service.award_points(user_id, 'publish_advice')
+        return advice
 
     def like_advice(self, advice_id: int, user_id: int):
         if self.repository.like_exists(advice_id, user_id):
             self.repository.delete_like(advice_id, user_id)
             return None
-        return self.repository.create_like(advice_id, user_id)
+        like = self.repository.create_like(advice_id, user_id)
+        advice = self.repository.find_by_id(advice_id)
+        if advice and advice.user_id != user_id:
+            self.points_service.award_points(advice.user_id, 'receive_like')
+        return like
 
     def delete_advice(self, advice_id: int, requester_id: int):
         from core.domain.user import User

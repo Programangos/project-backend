@@ -9,6 +9,7 @@ class User(models.Model):
     current_semester = models.IntegerField()
     avatar_url = models.TextField(blank=True, null=True)
     reputation_points = models.IntegerField(default=0)
+    title = models.CharField(max_length=100, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     role = models.ForeignKey(
         'core.Role',

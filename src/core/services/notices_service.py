@@ -1,6 +1,7 @@
 from datetime import date
 from rest_framework.exceptions import ValidationError
 from core.services.base_service import BaseService
+from core.services.points_service import PointsService
 
 
 class NoticesService(BaseService):
@@ -9,6 +10,7 @@ class NoticesService(BaseService):
             from core.infra.notices_repository import NoticesRepository
             repository = NoticesRepository()
         self.repository = repository
+        self.points_service = PointsService()
 
     def get_all_notices(self, search=None):
         return self.repository.get_all(search=search)
@@ -20,13 +22,19 @@ class NoticesService(BaseService):
         expiration = data.get('expiration_date')
         if expiration and expiration < date.today():
             raise ValidationError('La fecha de vigencia no puede ser en el pasado.')
-        return self.repository.create(data, user_id)
+        notice = self.repository.create(data, user_id)
+        self.points_service.award_points(user_id, 'publish_notice')
+        return notice
 
     def like_notice(self, notice_id: int, user_id: int):
         if self.repository.like_exists(notice_id, user_id):
             self.repository.delete_like(notice_id, user_id)
             return None
-        return self.repository.create_like(notice_id, user_id)
+        like = self.repository.create_like(notice_id, user_id)
+        notice = self.repository.find_by_id(notice_id)
+        if notice and notice.user_id != user_id:
+            self.points_service.award_points(notice.user_id, 'receive_like')
+        return like
 
     def unlike_notice(self, notice_id: int, user_id: int):
         self.repository.delete_like(notice_id, user_id)

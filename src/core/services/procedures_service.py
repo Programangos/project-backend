@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from core.services.base_service import BaseService
+from core.services.points_service import PointsService
 
 
 class ProceduresService(BaseService):
@@ -8,6 +9,7 @@ class ProceduresService(BaseService):
             from core.infra.procedures_repository import ProceduresRepository
             repository = ProceduresRepository()
         self.repository = repository
+        self.points_service = PointsService()
 
     def create_experience(self, data: dict, user_id: int, procedure_id: int = None):
         if data.get('actual_time_days', 0) <= 0:
@@ -16,7 +18,9 @@ class ProceduresService(BaseService):
         if not comment:
             raise ValidationError("El comentario es obligatorio.")
         cleaned = {**data, 'comment': comment}
-        return self.repository.create_experience(cleaned, user_id, procedure_id)
+        experience = self.repository.create_experience(cleaned, user_id, procedure_id)
+        self.points_service.award_points(user_id, 'publish_experience')
+        return experience
 
     def get_avg_time(self, procedure_id: int):
         return self.repository.get_avg_time(procedure_id)
@@ -83,4 +87,9 @@ class ProceduresService(BaseService):
         if self.repository.vote_exists(experience_id, user_id):
             self.repository.delete_vote(experience_id, user_id)
             return None
-        return self.repository.create_vote(experience_id, user_id)
+        vote = self.repository.create_vote(experience_id, user_id)
+        from core.domain.procedure import ProcedureExperience
+        exp = ProcedureExperience.objects.filter(id=experience_id).first()
+        if exp and exp.user_id != user_id:
+            self.points_service.award_points(exp.user_id, 'receive_like')
+        return vote
