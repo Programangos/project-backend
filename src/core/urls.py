@@ -16,7 +16,6 @@ from core.controllers.procedures_controller import (
     ProcedureCreateController,
     ProcedureDeleteController,
     ProcedureExperienceController,
-    ProcedureExperienceDeleteController,
     ProcedureAvgTimeController,
     ProcedureExperienceVoteController,
     ProcedureExperienceDeleteController,
@@ -25,6 +24,10 @@ from core.controllers.admin_controller import (
     AdminListUsersController,
     AdminDeleteUserController,
     AdminUpdateRoleController,
+)
+from core.controllers.buildings_controller import (
+    BuildingCommentListCreateController,
+    BuildingCommentDeleteController,
 )
 
 urlpatterns = [
@@ -65,9 +68,14 @@ urlpatterns = [
         name='experience-vote',
     ),
     path(
-        'experiences/<int:experience_id>/',
-        ProcedureExperienceDeleteController.as_view(),
-        name='experience-delete',
+        'buildings/<int:building_id>/comments/',
+        BuildingCommentListCreateController.as_view(),
+        name='building-comments',
+    ),
+    path(
+        'buildings/<int:building_id>/comments/<int:comment_id>/',
+        BuildingCommentDeleteController.as_view(),
+        name='building-comment-delete',
     ),
     path('admin/users/', AdminListUsersController.as_view(), name='admin-users'),
     path('admin/users/<int:user_id>/', AdminDeleteUserController.as_view(), name='admin-delete-user'),
