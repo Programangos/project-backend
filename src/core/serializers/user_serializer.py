@@ -10,10 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 'full_name', 'email', 'major', 'avatar_url',
-            'current_semester', 'reputation_points', 'created_at',
+            'current_semester', 'reputation_points', 'title', 'created_at',
             'is_characterized', 'role', 'role_name',
         ]
-        read_only_fields = ['id', 'reputation_points', 'created_at', 'is_characterized', 'role_name']
+        read_only_fields = ['id', 'reputation_points', 'title', 'created_at', 'is_characterized', 'role_name']
 
     def get_is_characterized(self, obj):
         return bool(obj.major and obj.current_semester)

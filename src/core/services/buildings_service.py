@@ -1,17 +1,23 @@
 from core.domain.building import BuildingComment
 from core.services.base_service import BaseService
+from core.services.points_service import PointsService
 
 
 class BuildingsService(BaseService):
+    def __init__(self):
+        self.points_service = PointsService()
+
     def get_comments(self, building_id: int):
         return BuildingComment.objects.filter(building_id=building_id).select_related('user').order_by('-created_at')
 
     def create_comment(self, building_id: int, user_id: int, content: str):
-        return BuildingComment.objects.create(
+        comment = BuildingComment.objects.create(
             building_id=building_id,
             user_id=user_id,
             content=content
         )
+        self.points_service.award_points(user_id, 'comment_building')
+        return comment
 
     def delete_comment(self, comment_id: int, requester_id: int):
         from core.domain.user import User
