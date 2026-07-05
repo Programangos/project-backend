@@ -37,8 +37,7 @@ CREATE TABLE building_comment (
     building_id INT,
     created_at TIMESTAMP,
 
-    FOREIGN KEY (user_id) REFERENCES "user"(id),
-    FOREIGN KEY (building_id) REFERENCES building(id)
+    FOREIGN KEY (user_id) REFERENCES "user"(id)
 );
 
 CREATE TABLE advice (
