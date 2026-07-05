@@ -29,8 +29,15 @@ from core.controllers.buildings_controller import (
     BuildingCommentListCreateController,
     BuildingCommentDeleteController,
 )
+from core.controllers.reports_controller import (
+    CreateReportController,
+    AdminReportListController,
+    AdminReportDismissController,
+    AdminReportDeleteContentController,
+)
 
 urlpatterns = [
+    path('reports/', CreateReportController.as_view(), name='create-report'),
     path('notices/', NoticesController.as_view(), name='notices'),
     path('notices/<int:notice_id>/like/', NoticeLikeController.as_view(), name='notice-like'),
     path('notices/<int:notice_id>/', NoticeDeleteController.as_view(), name='notice-delete'),
@@ -77,6 +84,9 @@ urlpatterns = [
         BuildingCommentDeleteController.as_view(),
         name='building-comment-delete',
     ),
+    path('admin/reports/', AdminReportListController.as_view(), name='admin-reports'),
+    path('admin/reports/<int:report_id>/dismiss/', AdminReportDismissController.as_view(), name='admin-report-dismiss'),
+    path('admin/reports/<int:report_id>/content/', AdminReportDeleteContentController.as_view(), name='admin-report-delete-content'),
     path('admin/users/', AdminListUsersController.as_view(), name='admin-users'),
     path('admin/users/<int:user_id>/', AdminDeleteUserController.as_view(), name='admin-delete-user'),
     path('admin/users/<int:user_id>/role/', AdminUpdateRoleController.as_view(), name='admin-update-role'),
