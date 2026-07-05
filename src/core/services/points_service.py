@@ -44,3 +44,10 @@ class PointsService:
         elif points >= 21:
             return 'Sobreviviente'
         return 'Cachorro'
+
+    def update_title(self, user_id: int):
+        user = User.objects.get(id=user_id)
+        new_title = self.calculate_title(user.reputation_points)
+        if new_title != user.title:
+            user.title = new_title
+            user.save(update_fields=['title'])

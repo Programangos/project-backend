@@ -42,11 +42,14 @@ class AuthService:
         return user
 
     def update_profile(self, user_id: int, data: dict):
-        allowed = {'major', 'current_semester', 'avatar_url'}
+        allowed = {'major', 'current_semester', 'avatar_url', 'reputation_points'}
         filtered = {k: v for k, v in data.items() if k in allowed}
         if not filtered:
             raise ValidationError("No hay campos válidos para actualizar.")
-        return self.repository.update(user_id, filtered)
+        user = self.repository.update(user_id, filtered)
+        from core.services.points_service import PointsService
+        PointsService().update_title(user_id)
+        return user
 
     def forgot_password(self, email: str):
         from core.infra.user_repository import UserRepository
