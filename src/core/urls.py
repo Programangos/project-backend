@@ -35,6 +35,10 @@ from core.controllers.reports_controller import (
     AdminReportDismissController,
     AdminReportDeleteContentController,
 )
+from core.controllers.zone_controller import (
+    ZoneListController,
+    ZoneDetailController,
+)
 
 urlpatterns = [
     path('reports/', CreateReportController.as_view(), name='create-report'),
@@ -90,4 +94,6 @@ urlpatterns = [
     path('admin/users/', AdminListUsersController.as_view(), name='admin-users'),
     path('admin/users/<int:user_id>/', AdminDeleteUserController.as_view(), name='admin-delete-user'),
     path('admin/users/<int:user_id>/role/', AdminUpdateRoleController.as_view(), name='admin-update-role'),
+    path('zones/', ZoneListController.as_view(), name='zone-list'),
+    path('zones/<int:pk>/', ZoneDetailController.as_view(), name='zone-detail'),
 ]
